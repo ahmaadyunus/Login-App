@@ -21,76 +21,65 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    EditText tv_email, tv_password;
     Button btn_login;
-    String email,pass,emailAPI,passAPI;
-    EditText email_ET, pass_ET;
-    ProgressBar progressBar;
-    Gson gson = new GsonBuilder().create();
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://private-7bb04d-signandlogin.apiary-mock.com/users/")
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
-    UserApi userApi = retrofit.create(UserApi.class);
 
+    Gson gson = new GsonBuilder().create();
+    Retrofit retrofit = new Retrofit
+            .Builder()
+            .baseUrl("https://private-7bb04d-signandlogin.apiary-mock.com/users/")
+            .addConverterFactory(GsonConverterFactory.create(gson)).build();
+    UserApi user_api = retrofit.create(UserApi.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        email_ET = (EditText)findViewById(R.id.email_ET);
-        pass_ET = (EditText)findViewById(R.id.pass_ET);
-        btn_login = (Button) findViewById(R.id.btn_login);
 
+        tv_email = (EditText)findViewById(R.id.email_ET);
+        tv_password = (EditText)findViewById(R.id.pass_ET);
+        btn_login = (Button)findViewById(R.id.btn_login);
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (email_ET.length() == 0) {
-                    Toast toast = Toast.makeText(MainActivity.this, getString(R.string.error_email), Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (pass_ET.length() == 0) {
-                    Toast toast = Toast.makeText(MainActivity.this, getString(R.string.error_pass), Toast.LENGTH_SHORT);
-                    toast.show();;
+                if (tv_email.getText().toString().trim().length() == 0) {
+                    tv_email.setError(getString(R.string.error_email));
+                } else if (tv_password.getText().toString().trim().length() == 0) {
+                    tv_password.setError(getString(R.string.error_pass));
                 } else {
                     login();
                 }
             }
         });
     }
-    public void login(){
-        email = email_ET.getText().toString();
-        pass = pass_ET.getText().toString();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://private-80e9a-android23.apiary-mock.com/users/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        UserApi user_api = retrofit.create(UserApi.class);
 
+
+    public void login(){
         Call<Users> call = user_api.getUsers();
         call.enqueue(new Callback<Users>() {
-
             @Override
             public void onResponse(Call<Users> call, Response<Users> response) {
+                boolean login = false;
+                String email = tv_email.getText().toString();
+                String password = tv_password.getText().toString();
 
-               boolean login = false;
-                        for (Users.UserItem user: response.body().getUsers()){
-                            emailAPI = user.getEmail();
-                            passAPI = user.getPassword();
-//                                emailAPI ="a";
- //                               passAPI = "a";
-                            if(email.equals(emailAPI)&& pass.equals(passAPI)){
-                                login = true;
-                            }
-                       }
-                        if(login){
-                            HomeActivity.prefs.edit().putBoolean("auth", false).commit();
-                            startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                            finish();
-                        }else{
-                            Toast toast = Toast.makeText(MainActivity.this, getString(R.string.error_login), Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
-           }
+                for(Users.UserItem user : response.body().getUsers()) {
+                    String getEmail = user.getEmail();
+                    String getPassword = user.getPassword();
+                    if (email.equals(getEmail) && password.equals(getPassword)) {
+                        login = true;
+                    }
+                }
+
+                if (login == true) {
+                    HomeActivity.prefs.edit().putBoolean("auth", false).commit();
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    finish();
+                } else {
+                    Toast toast = Toast.makeText(MainActivity.this, getString(R.string.error_login), Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
 
             @Override
             public void onFailure(Call<Users> call, Throwable t) {
@@ -99,5 +88,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }
+

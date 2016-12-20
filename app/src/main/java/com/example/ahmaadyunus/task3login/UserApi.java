@@ -16,27 +16,19 @@ import retrofit2.http.GET;
 
 public interface UserApi {
 
-    @GET("https://private-80e9a-android23.apiary-mock.com/users")
+    @GET("https://private-7bb04d-signandlogin.apiary-mock.com/users")
     Call<Users> getUsers();
 
-
-    @GET("https://private-80e9a-android23.apiary-mock.com/users/{id}")
-
+    @GET("https://private-7bb04d-signandlogin.apiary-mock.com/users/{id}")
     Call<User> getUser(@Path("id") String user_id);
 
-
-    @PUT("https://private-80e9a-android23.apiary-mock.com/users/{id}")
-
+    @PUT("https://private-7bb04d-signandlogin.apiary-mock.com/users/{id}")
     Call<User> updateUser(@Path("id") int user_id, @Body User user);
 
-
-    @POST("https://private-80e9a-android23.apiary-mock.com/users")
-
+    @POST("https://private-7bb04d-signandlogin.apiary-mock.com/users")
     Call<User> saveUser(@Body User user);
 
-
-    @DELETE("https://private-80e9a-android23.apiary-mock.com/users/{id}")
-
+    @DELETE("https://private-7bb04d-signandlogin.apiary-mock.com/users")
     Call<User> deleteUser(@Path("id") String user_id);
 
 }

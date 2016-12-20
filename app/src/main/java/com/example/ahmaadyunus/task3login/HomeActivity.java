@@ -17,16 +17,19 @@ public class HomeActivity extends AppCompatActivity {
         if (prefs.getBoolean("auth", true)) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
+        }else{
+            setContentView(R.layout.activity_home);
+            Button logout = (Button)findViewById(R.id.btn_logout);
+            logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    prefs.edit().putBoolean("auth", true).commit();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                }
+            });
         }
-        setContentView(R.layout.activity_home);
-        Button logout = (Button)findViewById(R.id.btn_logout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prefs.edit().putBoolean("auth", true).commit();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
-            }
-        });
+
+
     }
 }
