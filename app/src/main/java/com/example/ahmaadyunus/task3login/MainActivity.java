@@ -25,12 +25,6 @@ public class MainActivity extends AppCompatActivity {
     String email,pass,emailAPI,passAPI;
     EditText email_ET, pass_ET;
     ProgressBar progressBar;
-    Gson gson = new GsonBuilder().create();
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://private-7bb04d-signandlogin.apiary-mock.com/users/")
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
-    UserApi userApi = retrofit.create(UserApi.class);
 
 
     @Override
@@ -61,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         email = email_ET.getText().toString();
         pass = pass_ET.getText().toString();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://private-80e9a-android23.apiary-mock.com/users/")
+                .baseUrl("https://private-7bb04d-signandlogin.apiary-mock.com/users/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         UserApi user_api = retrofit.create(UserApi.class);
